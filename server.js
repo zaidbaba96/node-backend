@@ -1,6 +1,7 @@
 const express = require('express');
 const app= express();
 require("dotenv").config();
+const port = process.env.PORT || 4000;
 const cors = require('cors')
 
 app.use(express.json())
@@ -87,7 +88,7 @@ app.get('/contact', (req,res)=>{
 })
 
 
-app.listen(4000, (req , res)=>{
+app.listen(port, (req , res)=>{
 
     console.log("Server Listen At 4000");
 
