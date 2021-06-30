@@ -3,7 +3,7 @@ const User = require('../models/userSchema')
 module.exports = Authenticate = async (req, res, next)=>{
     try{
         const token = req.cookies.jwtoken;
-        const verifyToken =  jwt.varify( token , process.env.SECRET_KEY )
+        const verifyToken =jwt.varify( token , process.env.SECRET_KEY )
         console.log(token)
         console.log(verifyToken)
         const rootUser = await User.findOne({ _id: verifyToken._id , "tokens.token": token  });

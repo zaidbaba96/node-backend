@@ -76,7 +76,7 @@ router.post('/login',async (req ,res)=>{
 })
 
 
-router.get('/about', (req,res) => {
+router.get('/about', Authenticate ,(req,res) => {
     console.log("Hello My About")
     res.send(req.rootUser);
     console.log(req.rootUser)
