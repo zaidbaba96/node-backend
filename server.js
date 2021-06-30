@@ -39,7 +39,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(cors());
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 
 const User = require('./models/userSchema')
 const bodyParser = require("body-parser");
