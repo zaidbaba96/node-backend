@@ -51,17 +51,12 @@ router.post('/login',async (req ,res)=>{
         if(userExits){
             
             const isMatch = await bcrypt.compare(password , userExits.password)
-            token = await userExits.generateAuthToken();
-            console.log( token )
-            res.cookie("jwtoken" , token, {
-                             expires:new Date(Date.now() + 2589200000),
-                            httpOnly:true
-                        })
-    
+            
             if(! isMatch){
                 res.status(420).json("Invalid  Credential")
             }
             else{
+                var token = jwt.sign({ email: userExits.email }, process.env.SECRET_KEY, { expiresIn: '24h' }); 
                 res.status(200).json({message: "user login Successfully", token: token})
             }
 
@@ -76,10 +71,41 @@ router.post('/login',async (req ,res)=>{
 })
 
 
-router.get('/about', Authenticate ,(req,res) => {
+router.get('/about', Authenticate,async(req,res) => {
+    // res.setHeader('Access-Control-Allow-Headers', 'x-access-token','content-type');
+    // res.setHeader('Access-Control-Allow-Credentials', true);
     console.log("Hello My About")
-    res.send(req.rootUser);
-    console.log(req.rootUser)
-  });
+    let email = req.decoded.email;
+    console.log(email)
+       await User.findOne({email: email}).then(user => {
+            if(!user) {
+                return res.status(404).json({ error: "No User Found" });
+              }  else {
+                console.log(user)
+                    res.json(user);
+                   
+                }
+        }).catch(err => {
+            console.log(err);
+          })
+        });
 
+
+router.get('/getdata', Authenticate,async(req,res) => {
+    console.log("Hello My GetData")
+    let email = req.decoded.email;
+    console.log(email)
+        await User.findOne({email: email}).then(user => {
+            if(!user) {
+                return res.status(404).json({ error: "No User Found" });
+                }  else {
+                console.log(user)
+                    res.json(user);
+                    
+                }
+        }).catch(err => {
+            console.log(err);
+            })
+        });
+        
 module.exports = router;

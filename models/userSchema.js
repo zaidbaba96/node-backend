@@ -23,12 +23,12 @@ const userSchema = new mongoose.Schema({
     confirmPassword:{
         type: String, required:true
     },
-    tokens:[{
-        token:{
-            type:String,
-            required : true 
-        }
-    }]
+    // tokens:[{
+    //     token:{
+    //         type:String,
+    //         required : true 
+    //     }
+    // }]
 })
 
 
@@ -43,20 +43,14 @@ userSchema.pre('save', async function(next){
     next();
 })
 
-userSchema.methods.generateAuthToken = async function(){
-    try{
-        let token = jwt.sign({_id :this._id} ,process.env.SECRET_KEY)
-        // this.tokens = this.tokens.concat({ token : token } )
-        console.log(token,"In Token")
-        await this.save();
+// userSchema.methods.generateAuthToken = async function (req, res) {
+//         let token = jwt.sign({_id :this._id} ,process.env.SECRET_KEY)
+//         console.log(token,"In Token")
+//         await this.save();
 
-        return token;
-    }
-    catch(err){
-        console.log(err)
-
-    }
-}
+//         return ({jwt: token});
+//         };
+   
 
 const User = mongoose.model('Users', userSchema)
 

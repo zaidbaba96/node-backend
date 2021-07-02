@@ -1,27 +1,24 @@
 const jwt = require("jsonwebtoken")
 const User = require('../models/userSchema')
-module.exports = Authenticate = async (req, res, next)=>{
-    try{
-        const token = req.cookies.jwtoken;
-        const verifyToken =jwt.varify( token , process.env.SECRET_KEY )
-        console.log(token)
-        console.log(verifyToken)
-        const rootUser = await User.findOne({ _id: verifyToken._id , "tokens.token": token  });
-        console.log(rootUser)
+module.exports = Authenticate = async function(req, res, next) {
 
-        if(!rootUser){ throw new Error('User not Found') }
-        
-        req.token = token;
-        req.rootUser = rootUser;
-        req.userID = rootUser._id;
+    var token = req.body.token || req.body.query || req.headers['x-access-token'];
+    console.log(token, "Auth Wala")
+    if (token) {
+        jwt.verify(token, process.env.SECRET_KEY, function(err, decoded) {
+            if (err) {
+                res.status(400).json({ message: 'Token invalid' });
+            } else {
 
-        next();
+                req.decoded = decoded
 
-    } catch(err){
-        res.status(401).send("Unauthorised : No token Provided")
-        console.log(err)
-    }   
-    
-}
+                next();
+                // res.status(200).json({ message: 'Succesfull token provided' });
+            }
+        });
+    } else {
+        res.status(400).json({message: 'No token provided' });
+    }
+};
 
 //module.export = Authenticate
