@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const router = require('express').Router(); 
 require("dotenv").config();
 const bcrypt = require('bcryptjs')
-const Authenticate = require('../middleware/authenticate')
+const Authenticate = require('../middleware/authenticate');
+const authenticate = require('../middleware/authenticate');
 
 router.post('/register' ,async function(req, res){
     console.log(req.body)
@@ -57,7 +58,7 @@ router.post('/login',async (req ,res)=>{
             }
             else{
                 var token = jwt.sign({ email: userExits.email }, process.env.SECRET_KEY, { expiresIn: '24h' }); 
-                res.status(200).json({message: "user login Successfully", token: token})
+                res.status(200).json({message: "user login Successfully", token: token , userExits})
             }
 
         }
@@ -72,8 +73,7 @@ router.post('/login',async (req ,res)=>{
 
 
 router.get('/about', Authenticate,async(req,res) => {
-    // res.setHeader('Access-Control-Allow-Headers', 'x-access-token','content-type');
-    // res.setHeader('Access-Control-Allow-Credentials', true);
+
     console.log("Hello My About")
     let email = req.decoded.email;
     console.log(email)
@@ -81,7 +81,7 @@ router.get('/about', Authenticate,async(req,res) => {
             if(!user) {
                 return res.status(404).json({ error: "No User Found" });
               }  else {
-                console.log(user)
+                // console.log(user)
                     res.json(user);
                    
                 }
@@ -101,11 +101,41 @@ router.get('/getdata', Authenticate,async(req,res) => {
                 }  else {
                 console.log(user)
                     res.json(user);
-                    
                 }
         }).catch(err => {
             console.log(err);
             })
         });
         
+
+router.post('/contactUS', async(req , res)=>{
+    try{   
+
+        const {name ,email,  phone , message} = req.body;
+        if(!name || !email || !phone || !message){
+          return res.json({error : "please Fill All field Properly"})
+        }
+        const userContract = await User.findOne({name: name })
+
+        if(userContract){
+            userMessage =await userContract.addMessage(name , email , phone , message)
+            await userContract.save()
+            console.log(userContract)
+            res.status(200).json({message :" User Contract done Succesfully"})
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+})
+
+
+// router.get('/logout',async(req,res) => {
+//     console.log("Hello My Logout Page")
+//     localStorage.clear();
+//     res.status(200).json({message:"User Logout Successfully"})
+//  })
+    
+
+
 module.exports = router;

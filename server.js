@@ -12,15 +12,15 @@ app.use(cookieParser());
 
 
 
-// app.use(function (req, res, next) {
+app.use(function (req, res, next) {
 
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-//   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-//   res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
 
-//   next();
-// });
+  next();
+});
 // app.use(function (req, res, next) {
 //   /*var err = new Error('Not Found');
 //    err.status = 404;
@@ -41,7 +41,7 @@ app.use(cookieParser());
 //   next();
 // });
 
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
 
 const User = require('./models/userSchema')
 const bodyParser = require("body-parser");
