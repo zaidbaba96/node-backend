@@ -41,7 +41,7 @@ app.use(function (req, res, next) {
 //   next();
 // });
 
-app.use(cors({credentials: true, origin: 'http://localhost:3001'}));
+app.use(cors({credentials: true, origin: 'https://mern-front-end.herokuapp.com'}));
 
 const User = require('./models/userSchema')
 const bodyParser = require("body-parser");
