@@ -84,6 +84,10 @@ mongoose
 //   console.log("Hello My About")
 //   res.send("Hello About the World From Server")
 // })
+app.get('/', (req,res)=>{
+  console.log("Hello My About")
+  res.send("Hello World From Server")
+})
 
 app.get('/contact', (req,res)=>{
   console.log("Hello My About")
