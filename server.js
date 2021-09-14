@@ -4,7 +4,7 @@ const app= express();
 require("dotenv").config();
 const port = process.env.PORT || 4000;
 const cors = require('cors')
-
+const auth = require('./router/auth')
 app.use(express.json())
 
 const cookieParser = require("cookie-parser")
@@ -36,8 +36,8 @@ app.use(function(req, res, next) {
 //   // Pass to next layer of middleware
 //   next();
 // });
-
-app.use(cors({credentials: true, origin: 'https://mern-front-end.herokuapp.com'}));
+app.use('/api/auth', auth) 
+//app.use(cors({credentials: true, origin: 'https://mern-front-end.herokuapp.com'}));
 
 const User = require('./models/userSchema')
 const bodyParser = require("body-parser");
